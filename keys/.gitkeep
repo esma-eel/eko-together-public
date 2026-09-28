@@ -1,0 +1,4 @@
+# Keys directory
+# Private and public PEM keys are generated locally via:
+#   uv run python scripts/generate_keys.py
+# Real keys MUST NEVER be committed to Git.

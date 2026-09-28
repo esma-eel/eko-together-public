@@ -1,0 +1,48 @@
+[project]
+name = "discussion-forum"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.35.0",
+    "cryptography>=43.0.0",
+    "django>=5.1",
+    "django-modern-rest[msgspec]>=0.15.0",
+    "elasticsearch>=8.15.0",
+    "msgspec>=0.18.6",
+    "mongomock>=4.3.0",
+    "pika>=1.3.2",
+    "psycopg[binary]>=3.2.0",
+    "pyjwt[crypto]>=2.9.0",
+    "pymongo>=4.8.0",
+    "python-dotenv>=1.0.0",
+    "redis>=5.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["shared"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [".agents", ".agent", ".venv", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*" = ["E501", "I001"]
+
+

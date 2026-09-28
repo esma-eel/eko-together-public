@@ -1,0 +1,88 @@
+# ==============================================================================
+# Discussion Forum / Eko-Together - Git Ignore
+# ==============================================================================
+
+# --- Secrets, Environment Variables & Credentials (CRITICAL) ---
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+*.crt
+*.pfx
+keys/*
+!keys/.gitkeep
+keys/*.pem
+!keys/.gitkeep
+
+# --- Python Build & Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual Environments ---
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Testing & Quality Tools ---
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# --- IDEs & Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# --- Local Databases & Media ---
+*.sqlite3
+*.db
+/media/
+static_root/
+
+# --- Operating System & Misc ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.log
+graphify-out/
+.obsidian/
