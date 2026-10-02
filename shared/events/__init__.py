@@ -1,0 +1,87 @@
+"""Shared domain events and serialization utilities."""
+
+from shared.events.base import (
+    BaseEvent,
+    deserialize_event,
+    serialize_event,
+)
+from shared.events.constants import (
+    EXCHANGE_EVENTS,
+    QUEUE_FEED_NOTIFICATIONS,
+    QUEUE_POST_COUNTERS,
+    QUEUE_SEARCH_INGESTION,
+    ROUTING_COMMENT_CREATED,
+    ROUTING_COMMENT_DELETED,
+    ROUTING_COMMENT_UPDATED,
+    ROUTING_FORUM_CREATED,
+    ROUTING_FORUM_DELETED,
+    ROUTING_FORUM_MEMBER_JOINED,
+    ROUTING_FORUM_MEMBER_LEFT,
+    ROUTING_FORUM_UPDATED,
+    ROUTING_POST_CREATED,
+    ROUTING_POST_DELETED,
+    ROUTING_POST_UPDATED,
+    ROUTING_PROFILE_UPDATED,
+    ROUTING_USER_REGISTERED,
+    ROUTING_VOTE_CAST,
+    ROUTING_VOTE_REVOKED,
+)
+from shared.events.forums import (
+    ForumCreatedEvent,
+    ForumDeletedEvent,
+    ForumMemberJoinedEvent,
+    ForumMemberLeftEvent,
+    ForumUpdatedEvent,
+)
+from shared.events.posts import (
+    CommentCreatedEvent,
+    CommentDeletedEvent,
+    CommentUpdatedEvent,
+    PostCreatedEvent,
+    PostDeletedEvent,
+    PostUpdatedEvent,
+)
+from shared.events.publisher import publish_domain_event
+from shared.events.users import UserProfileUpdatedEvent, UserRegisteredEvent
+from shared.events.voting import VoteCastEvent, VoteRevokedEvent
+
+__all__ = [
+    "BaseEvent",
+    "CommentCreatedEvent",
+    "CommentDeletedEvent",
+    "CommentUpdatedEvent",
+    "EXCHANGE_EVENTS",
+    "ForumCreatedEvent",
+    "ForumDeletedEvent",
+    "ForumMemberJoinedEvent",
+    "ForumMemberLeftEvent",
+    "ForumUpdatedEvent",
+    "PostCreatedEvent",
+    "PostDeletedEvent",
+    "PostUpdatedEvent",
+    "QUEUE_FEED_NOTIFICATIONS",
+    "QUEUE_POST_COUNTERS",
+    "QUEUE_SEARCH_INGESTION",
+    "ROUTING_COMMENT_CREATED",
+    "ROUTING_COMMENT_DELETED",
+    "ROUTING_COMMENT_UPDATED",
+    "ROUTING_FORUM_CREATED",
+    "ROUTING_FORUM_DELETED",
+    "ROUTING_FORUM_MEMBER_JOINED",
+    "ROUTING_FORUM_MEMBER_LEFT",
+    "ROUTING_FORUM_UPDATED",
+    "ROUTING_POST_CREATED",
+    "ROUTING_POST_DELETED",
+    "ROUTING_POST_UPDATED",
+    "ROUTING_PROFILE_UPDATED",
+    "ROUTING_USER_REGISTERED",
+    "ROUTING_VOTE_CAST",
+    "ROUTING_VOTE_REVOKED",
+    "UserProfileUpdatedEvent",
+    "UserRegisteredEvent",
+    "VoteCastEvent",
+    "VoteRevokedEvent",
+    "deserialize_event",
+    "publish_domain_event",
+    "serialize_event",
+]
