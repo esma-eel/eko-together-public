@@ -1,0 +1,1 @@
+"""Forum Service application package."""
