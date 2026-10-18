@@ -1,0 +1,1 @@
+"""Votes application package."""
