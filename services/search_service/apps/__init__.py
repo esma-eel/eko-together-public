@@ -1,0 +1,1 @@
+"""Search service apps package."""
