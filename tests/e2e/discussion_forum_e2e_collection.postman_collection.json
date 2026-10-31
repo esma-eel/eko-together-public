@@ -1,0 +1,561 @@
+{
+  "info": {
+    "name": "Eko-Together Discussion Forum - E2E Integration Test Collection",
+    "_postman_id": "f8a7e2b1-9c3d-4e5f-a6b7-8c9d0e1f2a3b",
+    "description": "Comprehensive End-to-End lifecycle test suite across all 7 microservices via API Gateway.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01. API Gateway Healthcheck",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Gateway returns 200 Healthy', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var data = pm.response.json();",
+              "    pm.expect(data.status).to.eql('healthy');",
+              "    pm.expect(data.service).to.eql('api_gateway');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "02. Auth - Signup User A",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var rand = Math.floor(Math.random() * 100000);",
+              "pm.environment.set('user_a_username', 'architect_' + rand);",
+              "pm.environment.set('user_a_email', 'architect_' + rand + '@example.com');"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('User A registered successfully', function () {",
+              "    pm.response.to.have.status(201);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('profile_id');",
+              "    pm.environment.set('user_a_profile_id', json.profile_id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{user_a_username}}\",\n  \"email\": \"{{user_a_email}}\",\n  \"password\": \"P@ssword123456!\",\n  \"display_name\": \"Senior Architect A\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/auth/signup/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "auth", "signup", ""]
+        }
+      }
+    },
+    {
+      "name": "03. Auth - Login User A",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('User A logged in and received RS256 token', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('access_token');",
+              "    pm.environment.set('user_a_token', json.access_token);",
+              "    pm.environment.set('user_a_profile_id', json.profile.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"{{user_a_username}}\",\n  \"password\": \"P@ssword123456!\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/auth/login/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "auth", "login", ""]
+        }
+      }
+    },
+    {
+      "name": "04. Auth - Signup User B",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var rand = Math.floor(Math.random() * 100000);",
+              "pm.environment.set('user_b_username', 'developer_' + rand);",
+              "pm.environment.set('user_b_email', 'developer_' + rand + '@example.com');"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('User B registered successfully', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{user_b_username}}\",\n  \"email\": \"{{user_b_email}}\",\n  \"password\": \"P@ssword123456!\",\n  \"display_name\": \"Core Dev B\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/auth/signup/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "auth", "signup", ""]
+        }
+      }
+    },
+    {
+      "name": "05. Auth - Login User B",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('User B logged in', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.environment.set('user_b_token', json.access_token);",
+              "    pm.environment.set('user_b_profile_id', json.profile.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"{{user_b_username}}\",\n  \"password\": \"P@ssword123456!\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/auth/login/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "auth", "login", ""]
+        }
+      }
+    },
+    {
+      "name": "06. Social Graph - User B Follows User A",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Follow relationship established', function () {",
+              "    pm.expect([200, 201]).to.include(pm.response.code);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{user_b_token}}"}
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/profiles/{{user_a_profile_id}}/follow/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "profiles", "{{user_a_profile_id}}", "follow", ""]
+        }
+      }
+    },
+    {
+      "name": "07. Forum - User A Creates Community",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var rand = Math.floor(Math.random() * 100000);",
+              "pm.environment.set('forum_slug', 'dist-sys-' + rand);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Forum created by User A', function () {",
+              "    pm.response.to.have.status(201);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.slug).to.eql(pm.environment.get('forum_slug'));",
+              "    pm.environment.set('forum_id', json.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_a_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Distributed Systems Guild\",\n  \"slug\": \"{{forum_slug}}\",\n  \"description\": \"Architecture patterns and high availability engineering.\",\n  \"rules\": \"1. Cite benchmarks\\n2. Respect peers\",\n  \"post_permission\": \"ALL_MEMBERS\",\n  \"require_approval_to_join\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/forums/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "forums", ""]
+        }
+      }
+    },
+    {
+      "name": "08. Forum - User B Joins Community",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('User B enrolled in community', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.status).to.eql('APPROVED');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{user_b_token}}"}
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/forums/{{forum_slug}}/join/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "forums", "{{forum_slug}}", "join", ""]
+        }
+      }
+    },
+    {
+      "name": "09. Media - Presigned S3 Upload Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Presigned URL issued', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('upload_url');",
+              "    pm.expect(json).to.have.property('cdn_url');",
+              "    pm.environment.set('attached_media_url', json.cdn_url);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_a_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"filename\": \"architecture-blueprint.png\",\n  \"file_size_bytes\": 1048576,\n  \"content_type\": \"image/png\",\n  \"purpose\": \"POST_ATTACHMENT\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/media/upload-url/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "media", "upload-url", ""]
+        }
+      }
+    },
+    {
+      "name": "10. Posts - User A Publishes Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Post published to MongoDB', function () {",
+              "    pm.response.to.have.status(201);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('id');",
+              "    pm.environment.set('post_id', json.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_a_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"forum_id\": \"{{forum_id}}\",\n  \"title\": \"Scaling Polyglot Persistence with CQRS and Event Streams\",\n  \"body\": \"In this technical deep dive, we explore how PostgreSQL, MongoDB, Redis, and Elasticsearch harmoniously interact.\",\n  \"tags\": [\"architecture\", \"cqrs\", \"distributed\"],\n  \"media_urls\": [\"{{attached_media_url}}\"]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/posts/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "posts", ""]
+        }
+      }
+    },
+    {
+      "name": "11. Voting - User B Upvotes Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Vote registered in Dedicated Voting Service', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.data.user_vote).to.eql(1);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_b_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"value\": 1\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/posts/{{post_id}}/votes/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "posts", "{{post_id}}", "votes", ""]
+        }
+      }
+    },
+    {
+      "name": "12. Comments - User B Adds Root Comment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Comment added to Post tree', function () {",
+              "    pm.response.to.have.status(201);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.depth).to.eql(0);",
+              "    pm.environment.set('comment_id', json.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_b_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Exceptional architecture design! How do you handle cache invalidation on the feed?\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/posts/{{post_id}}/comments/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "posts", "{{post_id}}", "comments", ""]
+        }
+      }
+    },
+    {
+      "name": "13. Comments - User A Replies to Comment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Reply added at depth 1', function () {",
+              "    pm.response.to.have.status(201);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.depth).to.eql(1);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{user_a_token}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"We use Redis sorted sets rebuilt periodically by Celery workers to guarantee read performance!\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/comments/{{comment_id}}/replies/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "comments", "{{comment_id}}", "replies", ""]
+        }
+      }
+    },
+    {
+      "name": "14. Feed - Explore Popular Feed",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Feed query returns 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('items');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/feeds/explore/?sort=popular&limit=20",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "feeds", "explore", ""],
+          "query": [
+            {"key": "sort", "value": "popular"},
+            {"key": "limit", "value": "20"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "15. Search - Autocomplete Suggest",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Autocomplete suggestions return 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('suggestions');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/search/suggest/?q=polyglot",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "search", "suggest", ""],
+          "query": [
+            {"key": "q", "value": "polyglot"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "16. Search - Unified Multi-Entity Search",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Unified search returns 200 with hits', function () {",
+              "    pm.response.to.have.status(200);",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('posts');",
+              "    pm.expect(json).to.have.property('forums');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/search/?q=architecture",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "search", ""],
+          "query": [
+            {"key": "q", "value": "architecture"}
+          ]
+        }
+      }
+    }
+  ]
+}

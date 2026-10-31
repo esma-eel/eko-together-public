@@ -1,0 +1,1 @@
+"""Forums domain app."""
