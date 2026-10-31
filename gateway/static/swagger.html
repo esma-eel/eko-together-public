@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eko-Together API Gateway - Interactive Swagger Documentation</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
+  <link rel="icon" type="image/png" href="https://unpkg.com/swagger-ui-dist@5.18.2/favicon-32x32.png" sizes="32x32" />
+  <style>
+    html { box-sizing: border-box; overflow-y: scroll; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body { margin: 0; background: #fafafa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .topbar { background-color: #1b263b !important; }
+    .gateway-banner {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+      color: white;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+    .gateway-banner h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .gateway-banner p { margin: 6px 0 0; font-size: 13px; color: #e0e1dd; }
+    .gateway-badges span {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-left: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="gateway-banner">
+    <div>
+      <h1>🌐 Eko-Together Central API Gateway</h1>
+      <p>Single Ingress (Port 80) • Polyglot Microservices Platform • Multi-Spec Interactive OpenAPI Portal</p>
+    </div>
+    <div class="gateway-badges">
+      <span>Ingress: Port 80</span>
+      <span>7 Microservices</span>
+      <span>DMR &amp; RS256 JWT</span>
+    </div>
+  </div>
+
+  <div id="swagger-ui"></div>
+
+  <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-bundle.js"></script>
+  <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        urls: [
+          { url: "/docs/schema/auth.json", name: "1. Auth & User Service (/api/v1/auth/)" },
+          { url: "/docs/schema/forum.json", name: "2. Forum Service (/api/v1/forums/)" },
+          { url: "/docs/schema/media.json", name: "3. Media Service (/api/v1/media/)" },
+          { url: "/docs/schema/posts.json", name: "4. Post & Comment Service (/api/v1/posts/, /comments/)" },
+          { url: "/docs/schema/voting.json", name: "5. Voting Service (/api/v1/.../votes/)" },
+          { url: "/docs/schema/feed.json", name: "6. Feed & Ranking Service (/api/v1/feed/)" },
+          { url: "/docs/schema/search.json", name: "7. Search Service (/api/v1/search/)" }
+        ],
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: "StandaloneLayout",
+        defaultModelsExpandDepth: 1,
+        defaultModelExpandDepth: 1,
+        docExpansion: "list"
+      });
+      window.ui = ui;
+    };
+  </script>
+</body>
+</html>
